@@ -1,2 +1,28 @@
 @import "tailwindcss";
-@import "@heroui/styles"; 
+@import "@heroui/styles";
+
+@theme {
+  /* Colores de Fondo (Surface Colors) - Negro */
+  --color-surface-darkest: #0a0a0a;
+  --color-surface-secondary: #141414;
+  --color-surface-card: #1a1a1a;
+  
+  /* Colores de Acento (Branding) - Dorado */
+  --color-primary: #d4af37;
+  --color-primary-hover: #f4bf3a;
+  --color-primary-dark: #b8941f;
+  --color-secondary: #ffd700;
+  --color-secondary-hover: #ffed4e;
+  --color-accent: #c9a236;
+  
+  /* Tipografía y Textos */
+  --color-text-title: #ffffff;
+  --color-text-body: #a8a8a8;
+  --color-text-muted: #666666;
+  
+  /* Semántica (Feedback) */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+} 
+
