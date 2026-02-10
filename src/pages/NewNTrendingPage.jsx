@@ -10,7 +10,7 @@ const NewNTrendingPage = () => {
   // Juegos en tendencia (ordenados por agregados recientemente)
   const { data: trendingGames, isLoading: loadingTrending, isError: errorTrending } = useGames({
     page: 1,
-    page_size: 12,
+    page_size: 20,
     ordering: '-added', // Más agregados = en tendencia
   });
 
@@ -111,7 +111,7 @@ const GamesSkeleton = () => {
         <Card key={i} className="bg-zinc-900">
           <CardBody className="p-0">
             <Skeleton className="rounded-none">
-              <div className="aspect-[16/9]" />
+              <div className="aspect-video[16/9]" />
             </Skeleton>
             <div className="p-4 space-y-3">
               <Skeleton className="w-4/5 rounded-lg">
