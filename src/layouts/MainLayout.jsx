@@ -40,7 +40,7 @@ const MainLayout = ({ children }) => {
         </nav>
 
         {/* Contenido */}
-        <main className="flex-1 bg-surface-secondary text-white overflow-y-auto">
+        <main className="flex-1 bg-surface-darkest text-white overflow-y-auto">
           {/* Encabezado Móvil */}
           <div className="md:hidden sticky top-0 z-30 bg-white border-b p-4 flex items-center gap-3">
             <Button
