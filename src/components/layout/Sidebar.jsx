@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TrendingUp,
   Star,
@@ -11,15 +12,17 @@ import {
   Box,
   Settings,
   LogOut,
+  AlarmClock,
 } from 'lucide-react';
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState('tendencias');
+  const navigate = useNavigate();
 
   const discoverItems = [
     { id: 'tendencias', label: 'Tendencias', icon: TrendingUp },
-    { id: 'populares', label: 'Más Populares', icon: Star },
-    { id: 'proximos', label: 'Próximos Lanzamientos', icon: Calendar },
+    { id: 'ultimoslanzamientos', label: 'Últimos 30 días', icon: Calendar },
+    { id: 'proximos', label: 'Próximos Lanzamientos', icon: AlarmClock },
   ];
 
   const genreItems = [
@@ -36,6 +39,15 @@ const Sidebar = () => {
 
   const handleItemClick = (itemId) => {
     setActiveItem(itemId);
+
+    // Navegar a la ruta correspondiente sin recargar la página
+    const routes = {
+      tendencias: '/',
+      ultimoslanzamientos: '/ultimos-lanzamientos',
+    };
+
+    const target = routes[itemId] || '/';
+    navigate(target);
   };
 
   const MenuItem = ({ item }) => {
