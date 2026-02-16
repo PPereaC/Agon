@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Sidebar from '../components/layout/Sidebar';
 import NavbarApp from '../components/layout/Navbar';
 import { Button } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
@@ -13,24 +12,6 @@ const MainLayout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen">
-
-      {/* Sidebar Escritorio */}
-      <aside className="hidden md:block sticky top-0 h-screen">
-        <Sidebar />
-      </aside>
-
-      {/* Overlay Sidebar Móvil */}
-      {isMobileSidebarOpen && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/50 z-40 md:hidden"
-            onClick={handleToggleMobileSidebar}
-          />
-          <aside className="fixed left-0 top-0 h-full z-50 md:hidden">
-            <Sidebar />
-          </aside>
-        </>
-      )}
 
       {/* Área Principal - Navbar y Contenido */}
       <div className="flex-1 flex flex-col w-full">
