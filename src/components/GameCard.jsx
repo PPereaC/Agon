@@ -39,17 +39,6 @@ export const GameCard = ({ game }) => {
         game?.short_screenshots?.[0]?.image ||
         "https://heroui.com/images/hero-card-complete.jpeg";
 
-    if (import.meta.env.DEV) {
-        console.log("platform debug", {
-            name: game?.name,
-            platforms: (game.parent_platforms || []).map((p) => ({
-                id: p?.platform?.id,
-                name: p?.platform?.name,
-                slug: p?.platform?.slug
-            }))
-        });
-    }
-
     return (
         <Card className="group relative h-full overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-b from-white/10 via-white/5 to-white/10 backdrop-blur-xl shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:border-white/25 hover:shadow-[0_28px_90px_-32px_rgba(0,0,0,0.8)]">
             <CardHeader className="p-0">
