@@ -25,9 +25,20 @@ const LastReleasesPage = () => {
     <div className="space-y-12">
         {/* Sección de últimos lanzamientos */}
         <section>
-            <div className="flex items-center gap-4 mb-8">
-                <TrendingUp size={35} />
-                <h2 className="text-3xl font-semibold">Últimos Lanzamientos</h2>
+            <div className="flex items-center gap-6 mb-10">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-gradient-to-br from-[#d4af37] to-[#c9a236] rounded-xl shadow-lg shadow-[#d4af37]/20">
+                        <Calendar className="text-white" size={32} />
+                    </div>
+                    <div>
+                        <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#d4af37]">
+                            Últimos Lanzamientos
+                        </h2>
+                        <p className="text-sm text-gray-400 mt-1 font-medium">
+                            Novedades de los últimos 30 días
+                        </p>
+                    </div>
+                </div>
             </div>
             {loadingNew ? (
                 <GamesSkeleton />
