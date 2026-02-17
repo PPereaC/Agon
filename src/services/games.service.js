@@ -57,7 +57,20 @@ class GamesService {
       throw error;
     }
   }
+
+  /**
+   * Obtener lista de géneros
+   * @returns {Promise<Object>} Lista de géneros
+   */
+  async getGenres() {
+    try {
+      const response = await httpClient.get(API_ENDPOINTS.genres);
+      return response.results;
+    } catch (error) {
+      console.error('Error al obtener géneros:', error);
+      throw error;
+    }
+  }
 }
 
-// Exportar instancia única del servicio
 export const gamesService = new GamesService();
