@@ -87,7 +87,7 @@ export const GameCard = ({ game }) => {
                 </div>
 
                 {/* Título del juego */}
-                <h3 className="line-clamp-2 text-lg font-semibold leading-tight tracking-tight text-balance">
+                <h3 className="line-clamp-2 text-lg font-semibold leading-tight tracking-tight text-white text-left">
                     {game.name}
                 </h3>
 
