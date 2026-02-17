@@ -49,7 +49,7 @@ export const NavbarApp = () => {
             <NavbarContent className="hidden md:flex flex-1 justify-center gap-6 text-text-title">
                 <NavbarItem>
                     <Link className="text-text-title hover:text-primary" href="/">
-                        Trending
+                        Tendencias
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
