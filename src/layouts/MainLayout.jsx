@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import NavbarApp from '../components/layout/Navbar';
 import { Button } from '@heroui/react';
 import { Menu, X } from 'lucide-react';
 
 const MainLayout = ({ children }) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  // Páginas que ocupan todo el ancho sin padding contenedor
+  const isFullWidthPage = location.pathname.startsWith('/juego/');
 
   const handleToggleMobileSidebar = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen);
@@ -41,13 +46,14 @@ const MainLayout = ({ children }) => {
           </div>
 
           {/* Contenido de la Página */}
-          <div className="p-4 md:p-6 lg:p-8">
+          <div className={isFullWidthPage ? "" : "p-4 md:p-6 lg:p-8"}>
             {children}
           </div>
         </main>
       </div>
     </div>
   );
+
 };
 
 export default MainLayout;
