@@ -160,7 +160,7 @@ export const NavbarApp = () => {
                                             {genres?.slice(0, 12).map((genre) => (
                                                 <Link
                                                     key={genre.id}
-                                                    href={`/genre/${genre.slug}`}
+                                                    href={`/genero/${genre.slug}`}
                                                     className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#202020] border border-transparent hover:border-white/10 transition-all group"
                                                 >
                                                     <div className="w-11 h-12 rounded-lg overflow-hidden relative shadow-md bg-zinc-800">
