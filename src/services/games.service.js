@@ -71,6 +71,17 @@ class GamesService {
       throw error;
     }
   }
+
+  async getTrailers(id) {
+    try {
+      const response = await httpClient.get(API_ENDPOINTS.trailers(id));
+      return response;
+    } catch (error) {
+      console.error('Error al obtener los trailers:', error);
+      throw error;
+    }
+  }
+
 }
 
 export const gamesService = new GamesService();
