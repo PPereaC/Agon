@@ -4,9 +4,11 @@ import { Skeleton } from '@heroui/skeleton';
 import { Calendar, Globe, Star } from 'lucide-react';
 import { useGameDetail } from '../hooks/useGames';
 import { useGameScreenshots } from '../hooks/useGames';
+import { useGameTrailers } from '../hooks/useGames';
 import { SystemRequirementsTabs } from '../components/SystemRequirementsTabs';
 import React, { useState } from 'react';
 import ImageModal from '../components/ImageModal';
+import GameTrailersCarousel from '../components/GameTrailersCarousel';
 
 const VideoGameDetailsPage = () => {
     const { id } = useParams();
@@ -18,6 +20,7 @@ const VideoGameDetailsPage = () => {
 
     const { data: game, isLoading, isError } = useGameDetail(gameId);
     const { data: imagenes, isLoading: loadingImages, isError: errorImages } = useGameScreenshots(gameId);
+    const { data: trailers } = useGameTrailers(gameId);
 
     if (isLoading) return <DetailSkeleton />;
     if (loadingImages) return <DetailSkeleton />;
@@ -41,6 +44,7 @@ const VideoGameDetailsPage = () => {
             <div className="relative z-10 max-w-8xl mx-auto px-32 pt-32">
                 {/* --- HEADER --- */}
                 <div className="flex flex-col justify-end min-h-[40vh] mb-12">
+
                     <div className="flex flex-row items-center gap-4 mb-4">
                         {game.released && (
                             <Chip startContent={<Calendar size={16} className="text-blue-400" />} variant="flat" className="bg-white/10 text-white backdrop-blur-md border border-white/10 flex items-center gap-1 p-3">{new Date(game.released).getFullYear()}</Chip>
@@ -52,13 +56,6 @@ const VideoGameDetailsPage = () => {
                         {game.name}
                     </h1>
 
-                    {/* <div className="flex flex-wrap gap-3">
-                        {game.genres?.map((genre) => (
-                            <Chip key={genre.id} color="primary" variant="shadow" className="uppercase font-bold tracking-wider">
-                                {genre.name}
-                            </Chip>
-                        ))}
-                    </div> */}
                 </div>
 
                 {/* --- CONTENIDO PRINCIPAL --- */}
@@ -82,6 +79,13 @@ const VideoGameDetailsPage = () => {
                                     })()
                                 }}
                             />
+                            <div className="flex flex-wrap mt-4 gap-2">
+                                {game.genres?.map((genre) => (
+                                    <Chip key={genre.id} color="primary" variant="shadow" className="uppercase font-bold tracking-wider bg-white/10 text-white backdrop-blur-md border border-white/10 flex items-center gap-1 p-3">
+                                        {genre.name}
+                                    </Chip>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Galería de imágenes */}
@@ -90,7 +94,7 @@ const VideoGameDetailsPage = () => {
                                 Imágenes
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                                {imagenes?.results.map((img) => (
+                                {imagenes?.results.slice(0, 6).map((img) => (
                                     <div key={img.id} className="relative">
                                         <img
                                             src={img.image}
@@ -105,6 +109,7 @@ const VideoGameDetailsPage = () => {
                                 ))}
                             </div>
                         </div>
+
                         <ImageModal
                             imageUrl={selectedImage}
                             isOpen={isImageModalOpen}
@@ -113,6 +118,7 @@ const VideoGameDetailsPage = () => {
                                 setSelectedImage(null);
                             }}
                         />
+
                     </div>
 
                     {/* Columna Derecha: Detalles Técnicos */}
@@ -202,6 +208,12 @@ const VideoGameDetailsPage = () => {
                         )}
                     </div>
                 </div>
+
+                {/* --- TRAILERS --- */}
+                <div className="mt-8">
+                    <GameTrailersCarousel trailers={trailers?.results || []} gameName={game.name} />
+                </div>
+
             </div>
         </div>
     );
