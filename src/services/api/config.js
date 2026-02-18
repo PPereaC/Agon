@@ -20,6 +20,7 @@ export const API_ENDPOINTS = {
     creators: '/creators',
     tags: '/tags',
     screenshots: (id) => `/games/${id}/screenshots`,
+    trailers: (id) => `/games/${id}/movies`,
 };
 
 /**
