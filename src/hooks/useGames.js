@@ -112,3 +112,37 @@ export const useGameScreenshots = (id, autoFetch = true) => {
         error
     };
 };
+
+export const useGameTrailers = (id, autoFetch = true) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(LOADING_STATES.IDLE);
+    const [error, setError] = useState(null);
+
+    const fetchGameTrailers = async () => {
+        setLoading(LOADING_STATES.LOADING);
+        setError(null);
+        try {
+            const response = await gamesService.getTrailers(id);
+            setData(response);
+            setLoading(LOADING_STATES.SUCCESS);
+        } catch (err) {
+            setError(err);
+            setLoading(LOADING_STATES.ERROR);
+            console.error('Error en useGameTrailers:', err);
+        }
+    };
+
+    useEffect(() => {
+        if (autoFetch && id) {
+            fetchGameTrailers();
+        }
+    }, [id, autoFetch]);
+
+    return {
+        data,
+        isLoading: loading === LOADING_STATES.LOADING,
+        isSuccess: loading === LOADING_STATES.SUCCESS,
+        isError: loading === LOADING_STATES.ERROR,
+        error
+    };
+};
