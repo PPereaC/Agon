@@ -4,6 +4,7 @@ import { Chip } from '@heroui/chip';
 import { Skeleton } from '@heroui/skeleton';
 import { Calendar, Globe, Star, Clock, Gamepad2 } from 'lucide-react';
 import { useGameDetail } from '../hooks/useGames';
+import { SystemRequirementsTabs } from '../components/SystemRequirementsTabs';
 
 const VideoGameDetailsPage = () => {
     const { id } = useParams();
@@ -19,7 +20,7 @@ const VideoGameDetailsPage = () => {
 
     return (
         <div className="min-h-screen pb-20 bg-[#0f0f0f] relative overflow-hidden">
-            {/* --- FONDO BACKGROUND FIXED --- */}
+            {/* --- FONDO --- */}
             <div className="absolute inset-x-0 top-0 h-[100vh] z-0">
                 <img
                     src={game.background_image}
@@ -60,13 +61,19 @@ const VideoGameDetailsPage = () => {
                     <div className="lg:col-span-2 space-y-10">
                         {/* Sinopsis */}
                         <div className="bg-zinc-900/50 backdrop-blur-sm p-8 rounded-3xl border border-white/5 shadow-xl">
-                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                                <Gamepad2 className="text-primary" />
+                            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                                 Acerca del juego
                             </h2>
                             <div
                                 className="text-gray-300 leading-relaxed text-lg prose prose-invert max-w-none"
-                                dangerouslySetInnerHTML={{ __html: game.description || game.description_raw }}
+                                dangerouslySetInnerHTML={{ 
+                                    __html: (() => {
+                                        const fullText = game.description || game.description_raw || '';
+                                        const spanishIndex = fullText.indexOf('Español');
+                                        const textToShow = spanishIndex !== -1 ? fullText.substring(spanishIndex + 'Español'.length).trim() : fullText;
+                                        return textToShow.split('\n').join('<br/>');
+                                    })()
+                                }}
                             />
                         </div>
 
@@ -148,6 +155,17 @@ const VideoGameDetailsPage = () => {
                                 </div>
                             </div>
                         </div>
+                        {game.platforms?.find(p => p.platform.slug === 'pc')?.requirements && (
+                            <div className="bg-zinc-900/80 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-lg sticky top-24">
+                                <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4">
+                                    Requisitos del sistema
+                                </h3>
+
+                                <div className="space-y-6">
+                                    <SystemRequirementsTabs requirements={game.platforms.find(p => p.platform.slug === 'pc').requirements} />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
