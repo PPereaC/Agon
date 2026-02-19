@@ -6,6 +6,10 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/d
 import { Gamepad2, ChevronDown } from "lucide-react";
 import { useGenres } from "../../hooks/useGenres";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+
+
 export const SearchIcon = ({ size = 24, strokeWidth = 1.5, width, height, ...props }) => {
     return (
         <svg
@@ -184,12 +188,16 @@ export const NavbarApp = () => {
                 </NavbarItem>
             </NavbarContent>
 
-            <NavbarContent as="div" justify="end" className="items-center justify-end flex-1 gap-2">
+            <NavbarContent as="div" justify="end" className="items-center justify-end flex-1 gap-2 relative">
                 <div className="hidden lg:flex items-center gap-2 mr-2">
                     <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
                 </div>
-                <div className="border border-1-white/10 rounded-full overflow-hidden">
-                    <img src="/avatar.jpg" alt="Avatar" className="w-9 h-9 rounded-full object-cover" />
+                <div className="relative">
+                    <Avatar className="h-9 w-9">
+                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                        <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <Badge className="pointer-events-none absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-[#020617] bg-green-600 p-0" />
                 </div>
             </NavbarContent>
         </Navbar>
