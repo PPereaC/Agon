@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import ImageModal from '../components/ImageModal';
 import GameTrailersCarousel from '../components/GameTrailersCarousel';
 import { DLCcard } from '../components/DLCcard';
+import GameScreenshotsGallery from '../components/GameScreenshotsGallery';
 
 const VideoGameDetailsPage = () => {
     const { id } = useParams();
@@ -24,6 +25,7 @@ const VideoGameDetailsPage = () => {
     const { data: imagenes, isLoading: loadingImages, isError: errorImages } = useGameScreenshots(gameId);
     const { data: trailers } = useGameTrailers(gameId);
     const { data: dlcs } = useGameDLCs(gameId);
+    const screenshots = imagenes?.results || [];
 
     if (isLoading) return <DetailSkeleton />;
     if (loadingImages) return <DetailSkeleton />;
@@ -92,26 +94,14 @@ const VideoGameDetailsPage = () => {
                         </div>
 
                         {/* Galería de imágenes */}
-                        <div className="bg-zinc-900/50 backdrop-blur-sm p-8 rounded-3xl border border-white/20 shadow-xl space-y-10">
-                            <h2 className="text-2xl font-bold text-white flex items-center gap-2 mb-4">
-                                Imágenes
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                                {imagenes?.results.slice(0, 6).map((img) => (
-                                    <div key={img.id} className="relative">
-                                        <img
-                                            src={img.image}
-                                            alt={`${game.name} screenshot`}
-                                            onClick={() => {
-                                                setSelectedImage(img.image);
-                                                setIsImageModalOpen(true);
-                                            }}
-                                            className="w-full h-auto rounded-lg object-cover border border-white/20 hover:scale-105 transition-transform duration-300 cursor-pointer"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <GameScreenshotsGallery
+                            screenshots={screenshots}
+                            gameName={game.name}
+                            onImageSelect={(image) => {
+                                setSelectedImage(image);
+                                setIsImageModalOpen(true);
+                            }}
+                        />
 
                         <ImageModal
                             imageUrl={selectedImage}
@@ -212,7 +202,7 @@ const VideoGameDetailsPage = () => {
                     </div>
                 </div>
 
-                { /* --- DLCs --- */ }
+                { /* --- DLCs --- */}
                 {dlcs?.results?.length > 0 && (
                     <div className="mt-10 space-y-4">
                         <div className="flex items-end justify-between ml-2">
