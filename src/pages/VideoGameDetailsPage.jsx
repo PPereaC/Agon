@@ -5,10 +5,12 @@ import { Calendar, Globe, Star } from 'lucide-react';
 import { useGameDetail } from '../hooks/useGames';
 import { useGameScreenshots } from '../hooks/useGames';
 import { useGameTrailers } from '../hooks/useGames';
+import { useGameDLCs } from '../hooks/useGames';
 import { SystemRequirementsTabs } from '../components/SystemRequirementsTabs';
 import React, { useState } from 'react';
 import ImageModal from '../components/ImageModal';
 import GameTrailersCarousel from '../components/GameTrailersCarousel';
+import { DLCcard } from '../components/DLCcard';
 
 const VideoGameDetailsPage = () => {
     const { id } = useParams();
@@ -21,6 +23,7 @@ const VideoGameDetailsPage = () => {
     const { data: game, isLoading, isError } = useGameDetail(gameId);
     const { data: imagenes, isLoading: loadingImages, isError: errorImages } = useGameScreenshots(gameId);
     const { data: trailers } = useGameTrailers(gameId);
+    const { data: dlcs } = useGameDLCs(gameId);
 
     if (isLoading) return <DetailSkeleton />;
     if (loadingImages) return <DetailSkeleton />;
@@ -209,10 +212,49 @@ const VideoGameDetailsPage = () => {
                     </div>
                 </div>
 
+                { /* --- DLCs --- */ }
+                {dlcs?.results?.length > 0 && (
+                    <div className="mt-10 space-y-4">
+                        <div className="flex items-end justify-between ml-2">
+                            <div>
+                                <h2 className="text-3xl font-black tracking-tight text-white mb-2">
+                                    Expansiones
+                                </h2>
+                                <p className="text-sm text-zinc-400">
+                                    Contenido adicional disponible para {game.name}
+                                </p>
+                            </div>
+                            <span className="rounded-full border border-white/15 bg-zinc-900/70 px-3 py-1 text-xs font-semibold text-zinc-200 mr-2">
+                                {dlcs.results.length} DLC{dlcs.results.length > 1 ? "s" : ""}
+                            </span>
+                        </div>
+                        <DLCcard dlcs={dlcs.results} fallbackImageUrl={game.background_image} />
+                    </div>
+                )}
+
                 {/* --- TRAILERS --- */}
-                <div className="mt-8">
-                    <GameTrailersCarousel trailers={trailers?.results || []} gameName={game.name} />
-                </div>
+                {trailers?.results?.length > 0 && (
+                    <div className="mt-10 space-y-4">
+                        <div className="flex items-end justify-between ml-2">
+                            <div>
+                                <h2 className="text-3xl font-black tracking-tight text-white mb-2">
+                                    Trailers
+                                </h2>
+                                <p className="text-sm text-zinc-400">
+                                    Videos oficiales y gameplays de {game.name}
+                                </p>
+                            </div>
+                            <span className="rounded-full border border-white/15 bg-zinc-900/70 px-3 py-1 text-xs font-semibold text-zinc-200 mr-2">
+                                {trailers.results.length} VIDEO{trailers.results.length > 1 ? "S" : ""}
+                            </span>
+                        </div>
+                        <GameTrailersCarousel
+                            trailers={trailers.results}
+                            gameName={game.name}
+                            fallbackImageUrl={game.background_image}
+                        />
+                    </div>
+                )}
 
             </div>
         </div>
