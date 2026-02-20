@@ -18,6 +18,15 @@ const VideoGameDetailsPage = () => {
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
 
+    const filtroContenidoEspanol = (htmlContent) => {
+        if (!htmlContent) return '';
+        const spanishIndex = htmlContent.toLowerCase().indexOf('español');
+        if (spanishIndex !== -1) {
+            return htmlContent.substring(0, spanishIndex).trim();
+        }
+        return htmlContent;
+    };
+
     // Fallback: Si useParams no funciona por la configuración de rutas, intentamos sacar el ID de la URL manualmente
     const gameId = id || window.location.pathname.split('/').pop();
 
@@ -68,30 +77,19 @@ const VideoGameDetailsPage = () => {
 
                     {/* Columna Izquierda: Descripción y Media */}
                     <div className="lg:col-span-2 space-y-10">
-                        {/* Sinopsis */}
-                        <div className="bg-zinc-900/50 backdrop-blur-sm p-8 rounded-3xl border border-white/20 shadow-xl">
-                            <h2 className="text-2xl font-bold text-white flex items-center gap-2 mb-4">
-                                Acerca del juego
-                            </h2>
-                            <div
-                                className="text-gray-300 leading-relaxed text-lg prose prose-invert max-w-none"
-                                dangerouslySetInnerHTML={{
-                                    __html: (() => {
-                                        const fullText = game.description || game.description_raw || '';
-                                        const spanishIndex = fullText.indexOf('Español');
-                                        const textToShow = spanishIndex !== -1 ? fullText.substring(spanishIndex + 'Español'.length).trim() : fullText;
-                                        return textToShow.split('\n').join('<br/>');
-                                    })()
-                                }}
-                            />
-                            <div className="flex flex-wrap mt-4 gap-2">
-                                {game.genres?.map((genre) => (
-                                    <Chip key={genre.id} color="primary" variant="shadow" className="uppercase font-bold tracking-wider bg-white/10 text-white backdrop-blur-md border border-white/10 flex items-center gap-1 p-3">
-                                        {genre.name}
-                                    </Chip>
-                                ))}
-                            </div>
-                        </div>
+
+                        {/* Acerca del Juego */}
+                        <h2 className="text-3xl font-black tracking-tight text-white mb-2">
+                            Acerca del Juego
+                        </h2>
+                        
+                        <p className="text-sm text-zinc-400 mb-6">
+                            Resumen breve del juego
+                        </p>
+
+                        <p className="text-lg text-gray-300 leading-relaxed text-justify">
+                            <div dangerouslySetInnerHTML={{ __html: filtroContenidoEspanol(game.description) }} />
+                        </p>
 
                         {/* Galería de imágenes */}
                         <GameScreenshotsGallery
