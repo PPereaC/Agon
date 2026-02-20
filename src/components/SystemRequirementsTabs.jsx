@@ -74,15 +74,15 @@ export function SystemRequirementsTabs({ requirements }) {
                 onSelectionChange={setSelected}
                 variant="bordered"
                 classNames={{
-                    tabList: "bg-zinc-900/50 backdrop-blur-sm border border-white/10 p-1 rounded-lg gap-2",
-                    tab: "text-gray-400 h-10 px-6",
+                    tabList: "bg-zinc-900/50 backdrop-blur-sm border border-white/10 p-1 rounded-lg gap-2 w-full",
+                    tab: "text-gray-400 h-10 flex-1",
                     cursor: "bg-zinc-800 border border-white/20 rounded-md shadow-lg",
                     tabContent: "group-data-[selected=true]:text-white"
                 }}
             >
                 {minimum && (
                     <Tab key="minimo" title="Mínimo">
-                        <div className="mt-4 space-y-4">
+                        <div className="mt-4 space-y-4 text-justify">
                             <RequirementItem icon={Monitor} label="Sistema Operativo" value={minimum.os} />
                             <RequirementItem icon={Cpu} label="Procesador" value={minimum.processor} />
                             <RequirementItem icon={MemoryStick} label="Memoria RAM" value={minimum.memory} />
@@ -93,7 +93,7 @@ export function SystemRequirementsTabs({ requirements }) {
                 )}
                 {recommended && (
                     <Tab key="recomendados" title="Recomendados">
-                        <div className="mt-4 space-y-4">
+                        <div className="mt-4 space-y-4 text-justify">
                             <RequirementItem icon={Monitor} label="Sistema Operativo" value={recommended.os} />
                             <RequirementItem icon={Cpu} label="Procesador" value={recommended.processor} />
                             <RequirementItem icon={MemoryStick} label="Memoria RAM" value={recommended.memory} />
