@@ -4,6 +4,9 @@ import { Skeleton } from '@heroui/skeleton';
 import { Button } from '@heroui/button';
 import { TrendingUp, Calendar, Star } from 'lucide-react';
 import { GameCard } from '../components/GameCard';
+import { Pagination } from '../components/layout/pagination';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const LastReleasesPage = () => {
 
@@ -13,45 +16,71 @@ const LastReleasesPage = () => {
   thirtyDaysAgo.setDate(today.getDate() - 30);
   const formattedThirtyDaysAgo = thirtyDaysAgo.toISOString().split('T')[0];
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(() => {
+    const pageFromUrl = parseInt(searchParams.get('page'));
+    return pageFromUrl && pageFromUrl > 0 ? pageFromUrl : 1;
+  });
+  const pageSize = 20;
+
+  // Sincronizar URL cuando cambia la página
+  useEffect(() => {
+    const urlPage = parseInt(searchParams.get('page'));
+    if (urlPage !== currentPage) {
+      setSearchParams({ page: currentPage.toString() });
+    }
+  }, [currentPage, setSearchParams]);
+
   // Juegos nuevos (ordenados por fecha de lanzamiento)
   const { data: newGames, isLoading: loadingNew, isError: errorNew } = useGames({
-    page: 1,
-    page_size: 20,
+    page: currentPage,
+    page_size: pageSize,
     ordering: '-released', // Más recientes
     dates: `${formattedThirtyDaysAgo},${today.toISOString().split('T')[0]}`, // Últimos 30 días
   });
 
+  const totalPages = newGames?.count ? Math.ceil(newGames.count / pageSize) : 1;
+
   return (
     <div className="space-y-12">
-        {/* Sección de últimos lanzamientos */}
-        <section>
-            <div className="flex items-center gap-6 mb-10">
-                <div className="flex items-center gap-4">
-                    <div className="p-3 bg-[#020617]/90 border border-white/80 rounded-xl">
-                        <Calendar className="text-white" size={32} />
-                    </div>
-                    <div>
-                        <h2 className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 text-3xl tracking-wide">
-                            Últimos Lanzamientos
-                        </h2>
-                        <p className="text-sm text-gray-400 mt-1 font-medium">
-                            Novedades de los últimos 30 días
-                        </p>
-                    </div>
-                </div>
+      {/* Sección de últimos lanzamientos */}
+      <section>
+        <div className="flex items-center gap-6 mb-10">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-[#020617]/90 border border-white/80 rounded-xl">
+              <Calendar className="text-white" size={32} />
             </div>
-            {loadingNew ? (
-                <GamesSkeleton />
-            ) : errorNew ? (
-                <ErrorMessage message="Error al cargar juegos nuevos" />
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {newGames?.results.map((game) => (
-                        <GameCard key={game.id} game={game} />
-                    ))}
-                </div>
-            )}
-        </section>
+            <div>
+              <h2 className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 text-3xl tracking-wide">
+                Últimos Lanzamientos
+              </h2>
+              <p className="text-sm text-gray-400 mt-1 font-medium">
+                Novedades de los últimos 30 días
+              </p>
+            </div>
+          </div>
+        </div>
+        {loadingNew ? (
+          <GamesSkeleton />
+        ) : errorNew ? (
+          <ErrorMessage message="Error al cargar juegos nuevos" />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {newGames?.results.map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
+          </div>
+        )}
+        {!loadingNew && !errorNew && newGames?.results.length > 0 && (
+          <div className="mt-8 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
+      </section>
     </div>
   );
 };
