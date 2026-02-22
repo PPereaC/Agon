@@ -41,7 +41,7 @@ const MainLayout = ({ children }) => {
               <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center text-black font-bold">
                 G
               </div>
-              <span className="font-semibold text-lg">Lexis</span>
+              <span className="font-semibold text-lg">Agon</span>
             </div>
           </div>
 
