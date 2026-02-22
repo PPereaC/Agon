@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
 import { Link } from "@heroui/link";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
-import { Gamepad2, ChevronDown, Move } from "lucide-react";
+import { Gamepad2, ChevronDown, Move, Search } from "lucide-react";
 import { useGenres } from "../../hooks/useGenres";
+import { useSearchGames } from "../../hooks/useGames";
+import { debounce } from "../../utils/helpers.js";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -44,6 +46,36 @@ export const SearchIcon = ({ size = 24, strokeWidth = 1.5, width, height, ...pro
 export const NavbarApp = () => {
     const { genres, loading } = useGenres();
     const [isGenresOpen, setIsGenresOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [inputValue, setInputValue] = useState("");
+    const searchRef = useRef(null);
+
+    // Debounce para la búsqueda
+    const debouncedSetSearch = useCallback(
+        debounce((val) => {
+            setSearchQuery(val);
+            setIsSearchOpen(val.length > 0);
+        }, 300),
+        []
+    );
+
+    // Cerrar dropdown al hacer clic fuera
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setIsSearchOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const { data: searchResults, isLoading: searchLoading } = useSearchGames({
+        search: searchQuery,
+        page_size: 6,
+    }, searchQuery.length > 2);
 
     return (
         <Navbar
@@ -82,7 +114,7 @@ export const NavbarApp = () => {
             <NavbarContent className="hidden md:flex flex-1 justify-center gap-8">
                 <NavbarItem>
                     <Link
-                        className="text-gray-300 hover:text-white transition-colors font-medium text-sm tracking-wide"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
                         href="/"
                     >
                         Tendencias
@@ -90,7 +122,7 @@ export const NavbarApp = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-gray-300 hover:text-white transition-colors font-medium text-sm tracking-wide"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
                         aria-current="page"
                         href="/novedades"
                     >
@@ -99,7 +131,7 @@ export const NavbarApp = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-gray-300 hover:text-white transition-colors font-medium text-sm tracking-wide"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
                         href="#"
                     >
                         Próximamente
@@ -107,7 +139,7 @@ export const NavbarApp = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-gray-300 hover:text-white transition-colors font-medium text-sm tracking-wide"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
                         href="#"
                     >
                         Eternos
@@ -131,7 +163,7 @@ export const NavbarApp = () => {
                     >
                         <PopoverTrigger>
                             <Link
-                                className={`transition-colors font-medium text-sm tracking-wide cursor-pointer gap-1 items-center ${isGenresOpen ? "text-primary opacity-100" : "text-gray-300 hover:text-white"}`}
+                                className={`transition-colors font-medium text-sm tracking-wide cursor-pointer gap-1 items-center ${isGenresOpen ? "text-primary opacity-100" : "text-white hover:text-gray-300"}`}
                                 onPress={(e) => e.preventDefault()}
                             >
                                 Géneros
@@ -192,10 +224,86 @@ export const NavbarApp = () => {
             </NavbarContent>
 
             <NavbarContent as="div" justify="end" className="items-center justify-end flex-1 gap-2 relative">
-                <NavbarItem>
+                <NavbarItem className="relative" ref={searchRef}>
                     <div className="w-96">
-                        <SearchField />
+                        <SearchField
+                            value={inputValue}
+                            onChange={(val) => {
+                                setInputValue(val);
+                                debouncedSetSearch(val);
+                            }}
+                            onSubmit={() => {
+                                if (searchQuery.trim()) {
+                                    setIsSearchOpen(false);
+                                    window.location.href = `/buscar?q=${encodeURIComponent(searchQuery)}`;
+                                }
+                            }}
+                        />
                     </div>
+
+                    {/* Dropdown de resultados */}
+                    {isSearchOpen && searchQuery.length > 0 && (
+                        <div className="absolute top-full right-0 left-0 mt-2 w-[480px] bg-[#121212] border border-[#333] shadow-2xl rounded-2xl overflow-hidden z-50">
+                            <div className="flex w-full min-h-[200px] p-4 bg-[#020617]/90">
+                                {searchQuery.length <= 2 ? (
+                                    <div className="w-full flex flex-col items-center justify-center text-gray-500 py-8">
+                                        <Search size={32} className="mb-3 opacity-50" />
+                                        <p className="text-sm">Escribe al menos 3 caracteres para buscar</p>
+                                    </div>
+                                ) : searchLoading ? (
+                                    <div className="w-full flex items-center justify-center py-8">
+                                        <div className="text-gray-500 text-sm animate-pulse">Buscando...</div>
+                                    </div>
+                                ) : searchResults?.results?.length === 0 ? (
+                                    <div className="w-full flex flex-col items-center justify-center text-gray-500 py-8">
+                                        <p className="text-sm">No se encontraron juegos para "{searchQuery}"</p>
+                                    </div>
+                                ) : (
+                                    <div className="w-full grid grid-cols-1 gap-2">
+                                        {searchResults?.results?.slice(0, 6).map((game) => (
+                                            <Link
+                                                key={game.id}
+                                                href={`/juego/${game.id}`}
+                                                onPress={() => {
+                                                    setIsSearchOpen(false);
+                                                    setSearchQuery('');
+                                                }}
+                                                className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#202020] border border-transparent hover:border-white/10 transition-all group"
+                                            >
+                                                <div className="w-16 h-12 rounded-lg overflow-hidden relative shadow-md bg-zinc-800 flex-shrink-0">
+                                                    <img
+                                                        src={game.background_image}
+                                                        alt={game.name}
+                                                        className="w-full h-full object-cover transition-all duration-300"
+                                                    />
+                                                </div>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className="text-gray-300 group-hover:text-white text-sm font-medium transition-colors line-clamp-1">
+                                                        {game.name}
+                                                    </span>
+                                                    <span className="text-gray-500 text-xs">
+                                                        {game.released?.slice(0, 4) || 'N/A'} • ⭐ {game.rating?.toFixed(1) || '0.0'}
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                        {searchResults?.results?.length > 6 && (
+                                            <Link
+                                                href={`/buscar?q=${encodeURIComponent(searchQuery)}`}
+                                                onPress={() => {
+                                                    setIsSearchOpen(false);
+                                                    setSearchQuery('');
+                                                }}
+                                                className="flex items-center justify-center p-3 rounded-xl hover:bg-[#202020] border border-transparent hover:border-white/10 transition-all text-gray-400 hover:text-white text-sm font-medium mt-2"
+                                            >
+                                                Ver todos los resultados →
+                                            </Link>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </NavbarItem>
                 <div className="hidden lg:flex items-center gap-2 mr-2">
                     <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
