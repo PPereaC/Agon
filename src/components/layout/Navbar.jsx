@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
 import { Link } from "@heroui/link";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
-import { Gamepad2, ChevronDown } from "lucide-react";
+import { Gamepad2, ChevronDown, Move } from "lucide-react";
 import { useGenres } from "../../hooks/useGenres";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -47,7 +47,7 @@ export const NavbarApp = () => {
     return (
         <Navbar
             isBordered
-            className="bg-[#020617]/90 backdrop-blur-md border-b border-white/10 h-16 p-8"
+            className="bg-[#020617]/90 backdrop-blur-md border-b border-white/10 h-16 p-3"
             maxWidth="xl"
             classNames={{
                 item: [
@@ -66,12 +66,14 @@ export const NavbarApp = () => {
                 ],
             }}
         >
-            <NavbarContent justify="start" className="flex-1 items-center pl-1">
-                <NavbarBrand className="gap-3 transition-transform cursor-pointer">
-                    <a href="/">
-                        <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 text-3xl tracking-wide">
-                            LEXIS
-                        </p>
+            <NavbarContent justify="start" className="flex-1 items-center">
+                <NavbarBrand className="gap-3 transition-transform cursor-pointer flex items-center">
+                    <a href="/" className="flex items-center h-full">
+                        <img 
+                            src="/src/assets/logo.png" 
+                            alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos." 
+                            className="h-8 w-auto object-contain"
+                        />
                     </a>
                 </NavbarBrand>
             </NavbarContent>
