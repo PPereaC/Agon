@@ -16,7 +16,7 @@ const LastReleasesPage = () => {
   // Juegos nuevos (ordenados por fecha de lanzamiento)
   const { data: newGames, isLoading: loadingNew, isError: errorNew } = useGames({
     page: 1,
-    page_size: 12,
+    page_size: 20,
     ordering: '-released', // Más recientes
     dates: `${formattedThirtyDaysAgo},${today.toISOString().split('T')[0]}`, // Últimos 30 días
   });
