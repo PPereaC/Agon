@@ -8,6 +8,7 @@ import { useGenres } from "../../hooks/useGenres";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import SearchField from "./SearchField";
 
 
 export const SearchIcon = ({ size = 24, strokeWidth = 1.5, width, height, ...props }) => {
@@ -69,9 +70,9 @@ export const NavbarApp = () => {
             <NavbarContent justify="start" className="flex-1 items-center">
                 <NavbarBrand className="gap-3 transition-transform cursor-pointer flex items-center">
                     <a href="/" className="flex items-center h-full">
-                        <img 
-                            src="/src/assets/logo.png" 
-                            alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos." 
+                        <img
+                            src="/src/assets/logo.png"
+                            alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
                             className="h-8 w-auto object-contain"
                         />
                     </a>
@@ -191,6 +192,11 @@ export const NavbarApp = () => {
             </NavbarContent>
 
             <NavbarContent as="div" justify="end" className="items-center justify-end flex-1 gap-2 relative">
+                <NavbarItem>
+                    <div className="w-96">
+                        <SearchField />
+                    </div>
+                </NavbarItem>
                 <div className="hidden lg:flex items-center gap-2 mr-2">
                     <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
                 </div>
