@@ -44,7 +44,7 @@ const NewNTrendingPage = () => {
               <Flame className="text-white" size={32} />
             </div>
             <div>
-              <h2 className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 text-3xl tracking-wide">
+              <h2 className="font-bold bg-clip-text text-white text-3xl tracking-wide">
                 Tendencias
               </h2>
               <p className="text-sm text-gray-400 mt-1 font-medium">
