@@ -68,15 +68,6 @@ function AdminPage() {
                 </span>
               </div>
             </div>
-
-            {/* Botón de Cerrar Sesión */}
-            <Button
-              onClick={handleLogout}
-              className="bg-transparent hover:bg-white/5 text-gray-300 border border-white/20 font-normal rounded-none flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Cerrar Sesión
-            </Button>
           </div>
         </div>
 
