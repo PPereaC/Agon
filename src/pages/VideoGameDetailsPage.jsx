@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { Chip } from '@heroui/chip';
+import { Button } from '@heroui/button';
 import { Skeleton } from '@heroui/skeleton';
-import { Globe, Star } from 'lucide-react';
+import { Globe, Star, Heart } from 'lucide-react';
 import { useGameDetail } from '../hooks/useGames';
 import { useGameScreenshots } from '../hooks/useGames';
 import { useGameTrailers } from '../hooks/useGames';
@@ -13,11 +14,16 @@ import ImageModal from '../components/ImageModal';
 import GameTrailersCarousel from '../components/GameTrailersCarousel';
 import { DLCcard } from '../components/DLCcard';
 import GameScreenshotsGallery from '../components/GameScreenshotsGallery';
+import { useAuth } from '../contexts/AuthContext.jsx';
+import FavoritesApiService from '../services/favoritesApi.service.js';
 
 const VideoGameDetailsPage = () => {
     const { id } = useParams();
+    const { user, isAuthenticated } = useAuth();
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [favoriteLoading, setFavoriteLoading] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -32,7 +38,6 @@ const VideoGameDetailsPage = () => {
         return htmlContent;
     };
 
-    // Fallback: Si useParams no funciona por la configuración de rutas, intentamos sacar el ID de la URL manualmente
     const gameId = id || window.location.pathname.split('/').pop();
 
     const { data: game, isLoading, isError } = useGameDetail(gameId);
@@ -40,6 +45,49 @@ const VideoGameDetailsPage = () => {
     const { data: trailers } = useGameTrailers(gameId);
     const { data: dlcs } = useGameDLCs(gameId);
     const screenshots = imagenes?.results || [];
+
+    // Comprobar si el juego está en favoritos
+    useEffect(() => {
+        const checkFavorite = async () => {
+            if (isAuthenticated() && user && gameId) {
+                const result = await FavoritesApiService.isFavorite(gameId);
+                if (result.success) {
+                    setIsFavorite(result.isFavorite);
+                }
+            }
+        };
+        checkFavorite();
+    }, [isAuthenticated, user, gameId]);
+
+    // Manejar el toggle de favoritos
+    const handleFavoriteToggle = async () => {
+        if (!isAuthenticated()) {
+            navigate('/login');
+            return;
+        }
+
+        setFavoriteLoading(true);
+
+        if (isFavorite) {
+            const result = await FavoritesApiService.removeFavorite(gameId);
+            if (result.success) {
+                setIsFavorite(false);
+            }
+        } else {
+            const result = await FavoritesApiService.addFavorite({
+                id: gameId,
+                name: game.name,
+                background_image: game.background_image,
+                rating: game.rating,
+                released: game.released
+            });
+            if (result.success) {
+                setIsFavorite(true);
+            }
+        }
+
+        setFavoriteLoading(false);
+    };
 
     if (isLoading) return <DetailSkeleton />;
     if (loadingImages) return <DetailSkeleton />;
@@ -63,45 +111,45 @@ const VideoGameDetailsPage = () => {
             {/* --- CABECERA HERO --- */}
             <div className="relative z-10 flex flex-col justify-end h-[70vh] pb-12 max-w-8xl mx-auto px-32">
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, ease: 'easeOut' }}
-                        className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl leading-tight tracking-tight mb-5"
-                    >
-                        {game.name}
-                    </motion.h1>
+                <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl leading-tight tracking-tight mb-5"
+                >
+                    {game.name}
+                </motion.h1>
 
-                    <motion.div
-                        initial={{ opacity: 0, scaleX: 0 }}
-                        animate={{ opacity: 1, scaleX: 1 }}
-                        transition={{ duration: 0.4, delay: 0.3, ease: 'easeOut' }}
-                        style={{ originX: 0 }}
-                        className="w-16 h-px bg-white/40 mb-6"
-                    />
+                <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    animate={{ opacity: 1, scaleX: 1 }}
+                    transition={{ duration: 0.4, delay: 0.3, ease: 'easeOut' }}
+                    style={{ originX: 0 }}
+                    className="w-16 h-px bg-white/40 mb-6"
+                />
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.45, ease: 'easeOut' }}
-                        className="flex flex-row flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-400 font-medium"
-                    >
-                        {game.released && (
-                            <span>{new Date(game.released).getFullYear()}</span>
-                        )}
-                        {game.released && <span className="text-zinc-600">·</span>}
-                        <span className="flex items-center gap-1">
-                            <Star size={13} className="text-yellow-400 fill-yellow-400" />
-                            {game.rating} / 5
-                        </span>
-                        {game.genres?.length > 0 && <span className="text-zinc-600">·</span>}
-                        {game.genres?.map((genre, i) => (
-                            <React.Fragment key={genre.id}>
-                                <span className="text-zinc-400">{genre.name}</span>
-                                {i < game.genres.length - 1 && <span className="text-zinc-600">·</span>}
-                            </React.Fragment>
-                        ))}
-                    </motion.div>
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.45, ease: 'easeOut' }}
+                    className="flex flex-row flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-400 font-medium"
+                >
+                    {game.released && (
+                        <span>{new Date(game.released).getFullYear()}</span>
+                    )}
+                    {game.released && <span className="text-zinc-600">·</span>}
+                    <span className="flex items-center gap-1">
+                        <Star size={13} className="text-yellow-400 fill-yellow-400" />
+                        {game.rating} / 5
+                    </span>
+                    {game.genres?.length > 0 && <span className="text-zinc-600">·</span>}
+                    {game.genres?.map((genre, i) => (
+                        <React.Fragment key={genre.id}>
+                            <span className="text-zinc-400">{genre.name}</span>
+                            {i < game.genres.length - 1 && <span className="text-zinc-600">·</span>}
+                        </React.Fragment>
+                    ))}
+                </motion.div>
 
             </div>
 
@@ -210,6 +258,25 @@ const VideoGameDetailsPage = () => {
                                     {game.publishers?.map(p => p.name).join(", ") || "N/A"}
                                 </span>
                             </div>
+
+                            {/* Botón de Favoritos */}
+                            {isAuthenticated() && (
+                                <div className="mt-6">
+                                    <Button
+                                        onClick={handleFavoriteToggle}
+                                        disabled={favoriteLoading}
+                                        className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${isFavorite
+                                                ? 'bg-red-600 hover:bg-red-700 text-white'
+                                                : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+                                            }`}
+                                    >
+                                        <Heart
+                                            className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`}
+                                        />
+                                        {isFavorite ? 'Eliminar de Favoritos' : 'Añadir a Favoritos'}
+                                    </Button>
+                                </div>
+                            )}
 
                             {/* Botón para navegar a la página web */}
                             {game.website && (
