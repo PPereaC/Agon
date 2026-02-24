@@ -1,15 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
 import { Link } from "@heroui/link";
+import { Button } from "@heroui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
-import { Gamepad2, ChevronDown, Move, Search } from "lucide-react";
+import { Gamepad2, ChevronDown, Search, User, LogOut, Heart, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useGenres } from "../../hooks/useGenres";
 import { useSearchGames } from "../../hooks/useGames";
 import { debounce } from "../../utils/helpers.js";
+import { useAuth } from "../../contexts/AuthContext.jsx";
+import DropdownMenuAvatar from "./AvatarDropdownMenu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import SearchField from "./SearchField";
 
 
@@ -50,6 +53,8 @@ export const NavbarApp = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [inputValue, setInputValue] = useState("");
     const searchRef = useRef(null);
+    const navigate = useNavigate();
+    const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
     // Debounce para la búsqueda
     const debouncedSetSearch = useCallback(
@@ -76,6 +81,11 @@ export const NavbarApp = () => {
         search: searchQuery,
         page_size: 6,
     }, searchQuery.length > 2);
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/login');
+    };
 
     return (
         <Navbar
@@ -308,13 +318,27 @@ export const NavbarApp = () => {
                 <div className="hidden lg:flex items-center gap-2 mr-2">
                     <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
                 </div>
-                <div className="relative">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <Badge className="pointer-events-none absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-[#020617] bg-green-600 p-0" />
-                </div>
+
+                {/* User Section */}
+                {isAuthenticated() ? (
+                    <DropdownMenuAvatar navigate={navigate} handleLogout={handleLogout} />
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="light"
+                            className="text-white hover:text-gray-300"
+                            onClick={() => navigate('/login')}
+                        >
+                            Iniciar Sesión
+                        </Button>
+                        <Button
+                            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                            onClick={() => navigate('/registro')}
+                        >
+                            Registrarse
+                        </Button>
+                    </div>
+                )}
             </NavbarContent>
         </Navbar>
     );
