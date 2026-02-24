@@ -4,8 +4,11 @@ import { User, Heart, LogOut, Trash2, Gamepad2, Calendar, Star } from 'lucide-re
 import { useAuth } from '../contexts/AuthContext.jsx';
 import FavoritesApiService from '../services/favoritesApi.service.js';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useAuth } from '../contexts/AuthContext'
+import logo from "@/assets/logo.png"
 import {
   Card,
   CardContent,
@@ -57,10 +60,10 @@ function ProfilePage() {
   return (
     <div className="min-h-screen bg-[#020617] py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header con logo y divider */}
+        {/* Header */}
         <div className="text-center mb-12">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             alt="AGON"
             className="h-12 w-auto object-contain mx-auto mb-8"
           />

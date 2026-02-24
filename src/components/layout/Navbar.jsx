@@ -14,6 +14,7 @@ import DropdownMenuAvatar from "./AvatarDropdownMenu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import SearchField from "./SearchField";
+import logo from "@/assets/logo.png";
 
 
 export const SearchIcon = ({ size = 24, strokeWidth = 1.5, width, height, ...props }) => {
@@ -113,7 +114,7 @@ export const NavbarApp = () => {
                 <NavbarBrand className="gap-3 transition-transform cursor-pointer flex items-center">
                     <a href="/" className="flex items-center h-full">
                         <img
-                            src="/src/assets/logo.png"
+                            src={logo}
                             alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
                             className="h-8 w-auto object-contain"
                         />

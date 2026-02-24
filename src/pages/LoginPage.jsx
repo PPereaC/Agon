@@ -12,6 +12,7 @@ import {
   FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import logo from "@/assets/logo.png"
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -60,7 +61,7 @@ function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-12">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
             className="h-12 w-auto object-contain mx-auto mb-12"
           />

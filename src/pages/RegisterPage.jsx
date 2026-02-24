@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Eye, EyeOff, Chrome } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -11,6 +12,7 @@ import {
   FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import logo from "@/assets/logo.png"
 
 function RegisterPage() {
   const [displayName, setDisplayName] = useState('');
@@ -57,7 +59,7 @@ function RegisterPage() {
         {/* Logo */}
         <div className="text-center mb-12">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
             className="h-12 w-auto object-contain mx-auto mb-12"
           />

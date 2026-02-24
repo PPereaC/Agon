@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import logo from "@/assets/logo.png"
 
 function AdminPage() {
   const { user, logout, isAdmin } = useAuth();
@@ -40,7 +41,7 @@ function AdminPage() {
         {/* Header con logo y divider */}
         <div className="text-center mb-12">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             alt="AGON"
             className="h-12 w-auto object-contain mx-auto mb-8"
           />
