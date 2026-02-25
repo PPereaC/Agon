@@ -111,47 +111,47 @@ export const NavbarApp = () => {
             }}
         >
             <NavbarContent justify="start" className="flex-1 items-center">
-                <NavbarBrand className="gap-3 transition-transform cursor-pointer flex items-center">
-                    <a href="/" className="flex items-center h-full">
+                <NavbarBrand className="gap-3 transition-transform cursor-pointer flex items-center" onClick={() => navigate('/')}>
+                    <div className="flex items-center h-full">
                         <img
                             src={logo}
                             alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
                             className="h-8 w-auto object-contain"
                         />
-                    </a>
+                    </div>
                 </NavbarBrand>
             </NavbarContent>
 
             <NavbarContent className="hidden md:flex flex-1 justify-center gap-8">
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
-                        href="/"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        onPress={() => navigate('/')}
                     >
                         Tendencias
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
                         aria-current="page"
-                        href="/novedades"
+                        onPress={() => navigate('/novedades')}
                     >
                         Novedades
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
-                        href="/proximamente"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        onPress={() => navigate('/proximamente')}
                     >
                         Próximamente
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide"
-                        href="/top"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        onPress={() => navigate('/top')}
                     >
                         Excelentes
                     </Link>
@@ -210,7 +210,7 @@ export const NavbarApp = () => {
                                             {genres?.slice(0, 12).map((genre) => (
                                                 <Link
                                                     key={genre.id}
-                                                    href={`/genero/${genre.slug}`}
+                                                    onPress={() => navigate(`/genero/${genre.slug}`)}
                                                     className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#202020] border border-transparent hover:border-white/10 transition-all group"
                                                 >
                                                     <div className="w-11 h-12 rounded-lg overflow-hidden relative shadow-md bg-zinc-800">
@@ -246,7 +246,7 @@ export const NavbarApp = () => {
                             onSubmit={() => {
                                 if (searchQuery.trim()) {
                                     setIsSearchOpen(false);
-                                    window.location.href = `/buscar?q=${encodeURIComponent(searchQuery)}`;
+                                    navigate(`/buscar?q=${encodeURIComponent(searchQuery)}`);
                                 }
                             }}
                         />
@@ -274,10 +274,10 @@ export const NavbarApp = () => {
                                         {searchResults?.results?.slice(0, 6).map((game) => (
                                             <Link
                                                 key={game.id}
-                                                href={`/juego/${game.id}`}
                                                 onPress={() => {
                                                     setIsSearchOpen(false);
                                                     setSearchQuery('');
+                                                    navigate(`/juego/${game.id}`);
                                                 }}
                                                 className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#202020] border border-transparent hover:border-white/10 transition-all group"
                                             >
@@ -300,10 +300,10 @@ export const NavbarApp = () => {
                                         ))}
                                         {searchResults?.results?.length > 6 && (
                                             <Link
-                                                href={`/buscar?q=${encodeURIComponent(searchQuery)}`}
                                                 onPress={() => {
                                                     setIsSearchOpen(false);
                                                     setSearchQuery('');
+                                                    navigate(`/buscar?q=${encodeURIComponent(searchQuery)}`);
                                                 }}
                                                 className="flex items-center justify-center p-3 rounded-xl hover:bg-[#202020] border border-transparent hover:border-white/10 transition-all text-gray-400 hover:text-white text-sm font-medium mt-2"
                                             >
