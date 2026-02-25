@@ -8,8 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build && npm run copy-404",
+    "predeploy": "npm run build && npm run copy-404 && npm run copy-svgs",
     "copy-404": "node -e \"const fs=require('fs');fs.copyFileSync('dist/index.html','dist/404.html');\"",
+    "copy-svgs": "node -e \"const fs=require('fs');fs.mkdirSync('dist/svgs',{recursive:true});fs.readdirSync('public/svgs').forEach(f=>fs.copyFileSync('public/svgs/'+f,'dist/svgs/'+f));\"",
     "deploy": "gh-pages -d dist --dotfiles"
   },
   "dependencies": {
