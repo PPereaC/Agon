@@ -66,7 +66,7 @@ const TopGamesPage = () => {
                 ) : errorResultados ? (
                     <ErrorMessage message="Error al cargar juegos del género" />
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
                         {resultados?.results.map((game) => (
                             <GameCard key={game.id} game={game} />
                         ))}
@@ -89,7 +89,7 @@ const TopGamesPage = () => {
 // Skeleton para loading
 const GamesSkeleton = () => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
             {[...Array(8)].map((_, i) => (
                 <Card key={i} className="bg-zinc-900">
                     <CardBody className="p-0">

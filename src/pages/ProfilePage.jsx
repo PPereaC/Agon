@@ -57,33 +57,33 @@ function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#020617] py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6 sm:mb-8 md:mb-12">
           <img
             src={logo}
             alt="AGON"
-            className="h-12 w-auto object-contain mx-auto mb-8"
+            className="h-8 sm:h-10 md:h-12 w-auto object-contain mx-auto mb-4 sm:mb-6 md:mb-8"
           />
           <div className="border-t border-white/60"></div>
         </div>
 
         {/* Información del usuario */}
-        <div className="mb-12">
-          <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8">
             {/* Avatar */}
-            <Avatar className="w-20 h-20">
+            <Avatar className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20">
               <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
               <AvatarFallback>LR</AvatarFallback>
             </Avatar>
 
             {/* Información */}
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-2xl font-normal text-white mb-1">
+              <h1 className="text-xl sm:text-2xl font-normal text-white mb-1">
                 {user?.displayName || 'Usuario'}
               </h1>
-              <p className="text-gray-300 text-sm mb-3">{user?.email}</p>
+              <p className="text-gray-300 text-xs sm:text-sm mb-2 sm:mb-3">{user?.email}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-gray-300">
                 <span className="flex items-center gap-2">
                   <Heart className="w-4 h-4" />
@@ -100,8 +100,8 @@ function ProfilePage() {
 
         {/* Sección de favoritos */}
         <div>
-          <div className="flex items-center justify-between mb-8 border-b border-white/60 pb-4">
-            <h2 className="text-lg font-normal text-white flex items-center gap-2">
+          <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 border-b border-white/60 pb-4">
+            <h2 className="text-base sm:text-lg font-normal text-white flex items-center gap-2">
               <Heart className="w-5 h-5" />
               Mis Favoritos
             </h2>
@@ -127,7 +127,7 @@ function ProfilePage() {
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
               {favorites.map((game) => (
                 <Card
                   key={game.gameId}

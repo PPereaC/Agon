@@ -69,7 +69,7 @@ const NextReleasesPage = () => {
         <div className="space-y-12">
             {/* Sección de últimos lanzamientos */}
             <section>
-                <div className="flex justify-between items-center gap-6 mb-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6 mb-10">
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-[#020617]/90 border border-white/80 rounded-xl">
                             <CalendarClock className="text-white" size={32} />
@@ -84,7 +84,7 @@ const NextReleasesPage = () => {
                         </div>
                     </div>
 
-                    <div className="w-50 max-w-50">
+                    <div className="w-full md:w-50 md:max-w-50">
                         <TimeNextReleasesFilter onChange={handleTimeChange} value={tiempoFin} />
                     </div>
                 </div>
@@ -93,7 +93,7 @@ const NextReleasesPage = () => {
                 ) : errorNext ? (
                     <ErrorMessage message="Error al cargar juegos próximos" />
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
                         {nextGames?.results.map((game) => (
                             <GameCard key={game.id} game={game} nextRelease={true} />
                         ))}
@@ -116,7 +116,7 @@ const NextReleasesPage = () => {
 // Skeleton para loading
 const GamesSkeleton = () => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
             {[...Array(8)].map((_, i) => (
                 <Card key={i} className="bg-zinc-900">
                     <CardBody className="p-0">

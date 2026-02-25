@@ -46,7 +46,7 @@ export const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) =>
   return (
     <UIPagination>
       <PaginationContent>
-        <PaginationItem>
+        <PaginationItem className="hidden md:block">
           <PaginationPrevious 
             href="#" 
             onClick={(e) => { e.preventDefault(); handlePageChange(currentPage - 1); }}
@@ -68,7 +68,7 @@ export const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) =>
             )}
           </PaginationItem>
         ))}
-        <PaginationItem>
+        <PaginationItem className="hidden md:block">
           <PaginationNext 
             href="#" 
             onClick={(e) => { e.preventDefault(); handlePageChange(currentPage + 1); }}

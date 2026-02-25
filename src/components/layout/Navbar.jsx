@@ -4,7 +4,7 @@ import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
-import { Gamepad2, ChevronDown, Search, User, LogOut, Heart, Shield } from "lucide-react";
+import { Gamepad2, ChevronDown, Search, User, LogOut, Heart, Shield, Menu, Flame, Calendar, CalendarClock, Trophy, Swords } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useGenres } from "../../hooks/useGenres";
 import { useSearchGames } from "../../hooks/useGames";
@@ -13,6 +13,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import DropdownMenuAvatar from "./AvatarDropdownMenu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import SearchField from "./SearchField";
 import logo from "@/assets/logo.png";
 
@@ -54,6 +55,7 @@ export const NavbarApp = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [inputValue, setInputValue] = useState("");
     const searchRef = useRef(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
     const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
@@ -91,7 +93,7 @@ export const NavbarApp = () => {
     return (
         <Navbar
             isBordered
-            className="bg-[#020617]/90 backdrop-blur-md border-b border-white/10 h-16 p-3"
+            className="bg-[#020617]/90 backdrop-blur-md border-b border-white/10 h-14 sm:h-16 p-2 sm:p-3"
             maxWidth="xl"
             classNames={{
                 item: [
@@ -110,22 +112,182 @@ export const NavbarApp = () => {
                 ],
             }}
         >
-            <NavbarContent justify="start" className="flex-1 items-center">
-                <NavbarBrand className="gap-3 transition-transform cursor-pointer flex items-center" onClick={() => navigate('/')}>
+            <NavbarContent justify="start" className="flex-1 items-center gap-2 sm:gap-3 p-0 m-0">
+                {/* Botón de menú móvil */}
+                <div className="lg:hidden -ml-6">
+                    <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                        <SheetTrigger asChild>
+                            <Button
+                                isIconOnly
+                                variant="light"
+                                className="text-white hover:text-gray-300"
+                            >
+                                <Menu className="w-6 h-6" />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-[#0a0a0a] border-r border-white/10 p-0">
+                            <div className="flex flex-col h-full">
+                                {/* Header del menú */}
+                                <div className="p-4 border-b border-white/10">
+                                    <div className="flex items-center gap-3">
+                                        <img
+                                            src={logo}
+                                            alt="AGON"
+                                            className="h-8 w-auto object-contain"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Opciones de navegación */}
+                                <nav className="flex-1 py-4 overflow-y-auto min-h-0">
+                                    <div className="flex flex-col h-full px-3">
+                                        <SheetClose asChild>
+                                            <button
+                                                onClick={() => navigate('/')}
+                                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <Flame className="w-5 h-5 text-primary text-white" />
+                                                <span className="font-medium">Tendencias</span>
+                                            </button>
+                                        </SheetClose>
+
+                                        <SheetClose asChild>
+                                            <button
+                                                onClick={() => navigate('/novedades')}
+                                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <Calendar className="w-5 h-5 text-primary text-white" />
+                                                <span className="font-medium">Novedades</span>
+                                            </button>
+                                        </SheetClose>
+
+                                        <SheetClose asChild>
+                                            <button
+                                                onClick={() => navigate('/proximamente')}
+                                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <CalendarClock className="w-5 h-5 text-primary text-white" />
+                                                <span className="font-medium">Próximamente</span>
+                                            </button>
+                                        </SheetClose>
+
+                                        <SheetClose asChild>
+                                            <button
+                                                onClick={() => navigate('/top')}
+                                                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <Trophy className="w-5 h-5 text-primary text-white" />
+                                                <span className="font-medium">Excelentes</span>
+                                            </button>
+                                        </SheetClose>
+
+                                        {/* Sección de Géneros */}
+                                        <div className="pt-4 mt-4 border-t border-white/10 flex-1 flex flex-col min-h-0">
+                                            <h4 className="px-3 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                                                Géneros
+                                            </h4>
+                                            {loading ? (
+                                                <div className="px-3 py-2 text-gray-500 text-sm">Cargando...</div>
+                                            ) : (
+                                                <div className="space-y-1 flex-1 overflow-y-auto min-h-0">
+                                                    {genres?.map((genre) => (
+                                                        <SheetClose key={genre.id} asChild>
+                                                            <button
+                                                                onClick={() => navigate(`/genero/${genre.slug}`)}
+                                                                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors text-left text-sm"
+                                                            >
+                                                                <div className="w-8 h-8 rounded overflow-hidden bg-zinc-800 flex-shrink-0">
+                                                                    <img
+                                                                        src={genre.image_background}
+                                                                        alt={genre.name}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                                <span>{genre.name}</span>
+                                                            </button>
+                                                        </SheetClose>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </nav>
+
+                                {/* Footer del menú */}
+                                <div className="p-2 border-t border-white/10">
+                                    {isAuthenticated() ? (
+                                        <div className="space-y-1">
+                                            <SheetClose asChild>
+                                                <button
+                                                    onClick={() => navigate('/perfil')}
+                                                    className="w-full flex items-center gap-2 px-2 py-2 rounded text-sm text-white hover:bg-white/10 transition-colors text-left"
+                                                >
+                                                    <User className="w-4 h-4 text-white" />
+                                                    <span>Perfil</span>
+                                                </button>
+                                            </SheetClose>
+                                            {isAdmin() && (
+                                                <SheetClose asChild>
+                                                    <button
+                                                        onClick={() => navigate('/admin')}
+                                                        className="w-full flex items-center gap-2 px-2 py-2 rounded text-sm text-white hover:bg-white/10 transition-colors text-left"
+                                                    >
+                                                        <Shield className="w-4 h-4 text-white" />
+                                                        <span>Admin</span>
+                                                    </button>
+                                                </SheetClose>
+                                            )}
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full flex items-center gap-2 px-2 py-2 rounded text-sm text-red-400 hover:bg-white/10 transition-colors text-left"
+                                            >
+                                                <LogOut className="w-4 h-4 text-white" />
+                                                <span>Cerrar Sesión</span>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-1">
+                                            <SheetClose asChild>
+                                                <button
+                                                    onClick={() => navigate('/login')}
+                                                    className="w-full flex items-center gap-2 px-2 py-2 rounded text-sm text-white hover:bg-white/10 transition-colors text-left"
+                                                >
+                                                    <User className="w-4 h-4 text-white" />
+                                                    <span>Entrar</span>
+                                                </button>
+                                            </SheetClose>
+                                            <SheetClose asChild>
+                                                <button
+                                                    onClick={() => navigate('/registro')}
+                                                    className="w-full flex items-center gap-2 px-2 py-2 rounded text-sm text-white hover:bg-white/10 transition-colors text-left"
+                                                >
+                                                    <Heart className="w-4 h-4 text-white" />
+                                                    <span>Registro</span>
+                                                </button>
+                                            </SheetClose>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+                </div>
+
+                <NavbarBrand className="gap-2 sm:gap-3 transition-transform cursor-pointer flex items-center" onClick={() => navigate('/')}>
                     <div className="flex items-center h-full">
                         <img
                             src={logo}
                             alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
-                            className="h-8 w-auto object-contain"
+                            className="h-6 sm:h-7 md:h-8 w-auto object-contain"
                         />
                     </div>
                 </NavbarBrand>
             </NavbarContent>
 
-            <NavbarContent className="hidden md:flex flex-1 justify-center gap-8">
+            <NavbarContent className="hidden lg:flex flex-1 justify-center gap-4 sm:gap-6 md:gap-8">
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-xs sm:text-sm tracking-wide cursor-pointer"
                         onPress={() => navigate('/')}
                     >
                         Tendencias
@@ -133,7 +295,7 @@ export const NavbarApp = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-xs sm:text-sm tracking-wide cursor-pointer"
                         aria-current="page"
                         onPress={() => navigate('/novedades')}
                     >
@@ -142,7 +304,7 @@ export const NavbarApp = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-xs sm:text-sm tracking-wide cursor-pointer"
                         onPress={() => navigate('/proximamente')}
                     >
                         Próximamente
@@ -150,7 +312,7 @@ export const NavbarApp = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link
-                        className="text-white hover:text-gray-300 transition-colors font-medium text-sm tracking-wide cursor-pointer"
+                        className="text-white hover:text-gray-300 transition-colors font-medium text-xs sm:text-sm tracking-wide cursor-pointer"
                         onPress={() => navigate('/top')}
                     >
                         Excelentes
@@ -174,7 +336,7 @@ export const NavbarApp = () => {
                     >
                         <PopoverTrigger>
                             <Link
-                                className={`transition-colors font-medium text-sm tracking-wide cursor-pointer gap-1 items-center ${isGenresOpen ? "text-primary opacity-100" : "text-white hover:text-gray-300"}`}
+                                className={`transition-colors font-medium text-sm md:text-base tracking-wide cursor-pointer gap-1 items-center ${isGenresOpen ? "text-primary opacity-100" : "text-white hover:text-gray-300"}`}
                                 onPress={(e) => e.preventDefault()}
                             >
                                 Géneros
@@ -235,8 +397,8 @@ export const NavbarApp = () => {
             </NavbarContent>
 
             <NavbarContent as="div" justify="end" className="items-center justify-end flex-1 gap-2 relative">
-                <NavbarItem className="relative" ref={searchRef}>
-                    <div className="w-96">
+                <NavbarItem className="relative hidden md:block" ref={searchRef}>
+                    <div className="w-48 sm:w-64 md:w-72 lg:w-80 xl:w-96">
                         <SearchField
                             value={inputValue}
                             onChange={(val) => {
@@ -254,7 +416,7 @@ export const NavbarApp = () => {
 
                     {/* Dropdown de resultados */}
                     {isSearchOpen && searchQuery.length > 0 && (
-                        <div className="absolute top-full right-0 left-0 mt-2 w-[480px] bg-[#121212] border border-[#333] shadow-2xl rounded-2xl overflow-hidden z-50">
+                        <div className="absolute top-full right-0 left-0 mt-2 w-[300px] sm:w-[360px] md:w-[400px] lg:w-[480px] bg-[#121212] border border-[#333] shadow-2xl rounded-2xl overflow-hidden z-50">
                             <div className="flex w-full min-h-[200px] p-4 bg-[#020617]/90">
                                 {searchQuery.length <= 2 ? (
                                     <div className="w-full flex flex-col items-center justify-center text-gray-500 py-8">
@@ -320,26 +482,28 @@ export const NavbarApp = () => {
                     <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
                 </div>
 
-                {/* User Section */}
-                {isAuthenticated() ? (
-                    <DropdownMenuAvatar navigate={navigate} handleLogout={handleLogout} />
-                ) : (
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="light"
-                            className="text-white hover:text-gray-300"
-                            onClick={() => navigate('/login')}
-                        >
-                            Iniciar Sesión
-                        </Button>
-                        <Button
-                            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                            onClick={() => navigate('/registro')}
-                        >
-                            Registrarse
-                        </Button>
-                    </div>
-                )}
+                {/* User Section - Solo visible en desktop */}
+                <div className="hidden lg:flex items-center gap-2">
+                    {isAuthenticated() ? (
+                        <DropdownMenuAvatar navigate={navigate} handleLogout={handleLogout} />
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="light"
+                                className="text-white hover:text-gray-300"
+                                onClick={() => navigate('/login')}
+                            >
+                                Iniciar Sesión
+                            </Button>
+                            <Button
+                                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                                onClick={() => navigate('/registro')}
+                            >
+                                Registrarse
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </NavbarContent>
         </Navbar>
     );

@@ -36,32 +36,32 @@ function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#020617] py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         {/* Header con logo y divider */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6 sm:mb-8 md:mb-12">
           <img
             src={logo}
             alt="AGON"
-            className="h-12 w-auto object-contain mx-auto mb-8"
+            className="h-8 sm:h-10 md:h-12 w-auto object-contain mx-auto mb-4 sm:mb-6 md:mb-8"
           />
           <div className="border-t border-white/60"></div>
         </div>
 
         {/* Información del Admin */}
-        <div className="mb-12">
-          <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8">
             {/* Icono Admin */}
-            <div className="w-20 h-20 bg-white/10 flex items-center justify-center border border-white/20">
-              <Shield className="w-10 h-10 text-white" />
+            <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 bg-white/10 flex items-center justify-center border border-white/20">
+              <Shield className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 text-white" />
             </div>
 
             {/* Información del Admin */}
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-2xl font-normal text-white mb-1">
+              <h1 className="text-xl sm:text-2xl md:text-2xl font-normal text-white mb-1">
                 Panel de Administración
               </h1>
-              <p className="text-gray-400 text-sm mb-3">{user?.email}</p>
+              <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-3">{user?.email}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-gray-400">
                 <span className="flex items-center gap-2">
                   <Shield className="w-4 h-4" />
@@ -74,14 +74,14 @@ function AdminPage() {
 
         {/* Sección de Estadísticas */}
         <div>
-          <div className="flex items-center justify-between mb-8 border-b border-white/60 pb-4">
-            <h2 className="text-lg font-normal text-white flex items-center gap-2">
+          <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 border-b border-white/60 pb-4">
+            <h2 className="text-base sm:text-lg font-normal text-white flex items-center gap-2">
               <BarChart3 className="w-5 h-5" />
               Estadísticas
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-8 sm:mb-10 md:mb-12">
             <Card className="bg-transparent border border-white/60 rounded-none transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -150,14 +150,14 @@ function AdminPage() {
 
         {/* Sección de Gestión */}
         <div>
-          <div className="flex items-center justify-between mb-8 border-b border-white/60 pb-4">
-            <h2 className="text-lg font-normal text-white flex items-center gap-2">
+          <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 border-b border-white/60 pb-4">
+            <h2 className="text-base sm:text-lg font-normal text-white flex items-center gap-2">
               <Users className="w-5 h-5" />
               Gestión
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
             <Card className="bg-transparent border border-white/60 rounded-none transition-colors cursor-pointer group">
               <CardHeader className="p-6">
                 <CardTitle className="text-lg font-normal text-white flex items-center gap-2">

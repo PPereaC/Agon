@@ -109,13 +109,13 @@ const VideoGameDetailsPage = () => {
             </div>
 
             {/* --- CABECERA HERO --- */}
-            <div className="relative z-10 flex flex-col justify-end h-[70vh] pb-12 max-w-8xl mx-auto px-32">
+            <div className="relative z-10 flex flex-col justify-end h-[70vh] pb-8 sm:pb-10 md:pb-12 max-w-8xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32">
 
                 <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
-                    className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl leading-tight tracking-tight mb-5"
+                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white drop-shadow-2xl leading-tight tracking-tight mb-5"
                 >
                     {game.name}
                 </motion.h1>
@@ -154,17 +154,17 @@ const VideoGameDetailsPage = () => {
             </div>
 
             {/* --- CONTENIDO PRINCIPAL --- */}
-            <div className="relative z-10 max-w-8xl mx-auto px-32 pt-8">
+            <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32 pt-8">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.1 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
-                    className="grid grid-cols-1 lg:grid-cols-3 gap-10"
+                    className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 lg:gap-10"
                 >
 
                     {/* Columna Izquierda: Descripción y Media */}
-                    <div className="lg:col-span-2 space-y-10">
+                    <div className="lg:col-span-1 xl:col-span-2 space-y-6 md:space-y-8 lg:space-y-10">
 
                         {/* Acerca del Juego */}
                         <h2 className="text-3xl font-black tracking-tight text-white mb-2">
@@ -201,7 +201,7 @@ const VideoGameDetailsPage = () => {
                     </div>
 
                     {/* Columna Derecha: Detalles Técnicos */}
-                    <div className="space-y-16 sticky top-24 border-l border-white/10 pl-10">
+                    <div className="space-y-8 lg:space-y-16 lg:sticky lg:top-24 border-t lg:border-t-0 lg:border-l border-white/10 pt-6 lg:pt-0 lg:pl-8 xl:pl-10">
                         <h2 className="text-3xl font-black tracking-tight text-white mb-2">
                             Información
                         </h2>
@@ -362,7 +362,7 @@ const DetailSkeleton = () => {
     return (
         <div className="min-h-screen pb-20 bg-[#0f0f0f]">
             <Skeleton className="w-full h-[60vh] rounded-b-3xl bg-zinc-800" />
-            <div className="max-w-7xl mx-auto px-6 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
                 <div className="lg:col-span-2 space-y-6">
                     <Skeleton className="h-10 w-1/3 rounded-lg bg-zinc-800" />
                     <Skeleton className="h-40 w-full rounded-2xl bg-zinc-800" />
