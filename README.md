@@ -1,8 +1,6 @@
 <div align="center">
   <img src="./src/assets/logo.png" alt="AGON Logo" width="200"/>
   
-  # AGON
-  
   ### Plataforma web de descubrimiento y gestión de videojuegos
   
   [![React](https://img.shields.io/badge/React-19.2.4-61dafb?logo=react)](https://reactjs.org/)
