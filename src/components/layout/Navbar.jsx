@@ -114,7 +114,7 @@ export const NavbarApp = () => {
         >
             <NavbarContent justify="start" className="flex-1 items-center gap-2 sm:gap-3 p-0 m-0">
                 {/* Botón de menú móvil */}
-                <div className="lg:hidden -ml-6">
+                <div className="lg:hidden">
                     <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                         <SheetTrigger asChild>
                             <Button
