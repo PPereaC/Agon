@@ -56,14 +56,25 @@ export const NavbarApp = () => {
     const [inputValue, setInputValue] = useState("");
     const searchRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+    const [mobileSearchQuery, setMobileSearchQuery] = useState("");
+    const [mobileInputValue, setMobileInputValue] = useState("");
     const navigate = useNavigate();
     const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
-    // Debounce para la búsqueda
+    // Debounce para la búsqueda desktop
     const debouncedSetSearch = useCallback(
         debounce((val) => {
             setSearchQuery(val);
             setIsSearchOpen(val.length > 0);
+        }, 300),
+        []
+    );
+
+    // Debounce para la búsqueda móvil
+    const debouncedSetMobileSearch = useCallback(
+        debounce((val) => {
+            setMobileSearchQuery(val);
         }, 300),
         []
     );
@@ -85,12 +96,18 @@ export const NavbarApp = () => {
         page_size: 6,
     }, searchQuery.length > 2);
 
+    const { data: mobileSearchResults, isLoading: mobileSearchLoading } = useSearchGames({
+        search: mobileSearchQuery,
+        page_size: 10,
+    }, mobileSearchQuery.length > 2);
+
     const handleLogout = async () => {
         await logout();
         navigate('/login');
     };
 
     return (
+        <>
         <Navbar
             isBordered
             className="bg-[#020617]/90 backdrop-blur-md border-b border-white/10 h-14 sm:h-16 p-2 sm:p-3"
@@ -482,6 +499,18 @@ export const NavbarApp = () => {
                     <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
                 </div>
 
+                {/* Botón de búsqueda móvil */}
+                <div className="lg:hidden">
+                    <Button
+                        isIconOnly
+                        variant="light"
+                        className="text-white hover:text-gray-300"
+                        onClick={() => setIsMobileSearchOpen(true)}
+                    >
+                        <Search className="w-5 h-5" />
+                    </Button>
+                </div>
+
                 {/* User Section - Solo visible en desktop */}
                 <div className="hidden lg:flex items-center gap-2">
                     {isAuthenticated() ? (
@@ -506,6 +535,122 @@ export const NavbarApp = () => {
                 </div>
             </NavbarContent>
         </Navbar>
+
+        {/* Modal de búsqueda móvil */}
+        {isMobileSearchOpen && (
+            <div className="fixed inset-0 z-[100] lg:hidden flex flex-col bg-[#020617]/98 backdrop-blur-md">
+                        {/* Header con barra de búsqueda */}
+                        <div className="p-4 border-b border-white/10">
+                            <div className="flex items-center gap-3">
+                                <div className="flex-1 relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar videojuegos..."
+                                        value={mobileInputValue}
+                                        onChange={(e) => {
+                                            setMobileInputValue(e.target.value);
+                                            debouncedSetMobileSearch(e.target.value);
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && mobileSearchQuery.trim()) {
+                                                setIsMobileSearchOpen(false);
+                                                navigate(`/buscar?q=${encodeURIComponent(mobileSearchQuery)}`);
+                                                setMobileInputValue('');
+                                                setMobileSearchQuery('');
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="w-full bg-white/10 text-white placeholder-gray-400 rounded-lg px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    />
+                                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                </div>
+                                <Button
+                                    isIconOnly
+                                    variant="light"
+                                    className="text-white hover:text-gray-300"
+                                    onClick={() => {
+                                        setIsMobileSearchOpen(false);
+                                        setMobileInputValue('');
+                                        setMobileSearchQuery('');
+                                    }}
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Resultados de búsqueda */}
+                        <div className="flex-1 overflow-y-auto p-4">
+                            {mobileSearchQuery.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                                    <Search className="w-16 h-16 mb-4 opacity-50" />
+                                    <p className="text-lg font-medium">Busca tus juegos favoritos</p>
+                                    <p className="text-sm mt-2">Escribe el nombre de un juego</p>
+                                </div>
+                            ) : mobileSearchQuery.length <= 2 ? (
+                                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                                    <Search className="w-16 h-16 mb-4 opacity-50" />
+                                    <p className="text-sm">Escribe al menos 3 caracteres</p>
+                                </div>
+                            ) : mobileSearchLoading ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <div className="text-gray-400 text-sm animate-pulse">Buscando...</div>
+                                </div>
+                            ) : mobileSearchResults?.results?.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                                    <p className="text-sm">No se encontraron juegos para "{mobileSearchQuery}"</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {mobileSearchResults?.results?.map((game) => (
+                                        <button
+                                            key={game.id}
+                                            onClick={() => {
+                                                setIsMobileSearchOpen(false);
+                                                setMobileInputValue('');
+                                                setMobileSearchQuery('');
+                                                navigate(`/juego/${game.id}`);
+                                            }}
+                                            className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-transparent hover:border-white/10 transition-all active:scale-95"
+                                        >
+                                            <div className="w-20 h-16 rounded-lg overflow-hidden relative shadow-md bg-zinc-800 flex-shrink-0">
+                                                <img
+                                                    src={game.background_image}
+                                                    alt={game.name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                            <div className="flex-1 text-left min-w-0">
+                                                <p className="text-white font-medium text-sm line-clamp-1">
+                                                    {game.name}
+                                                </p>
+                                                <p className="text-gray-400 text-xs mt-1">
+                                                    {game.released?.slice(0, 4) || 'N/A'} • ⭐ {game.rating?.toFixed(1) || '0.0'}
+                                                </p>
+                                            </div>
+                                        </button>
+                                    ))}
+                                    {mobileSearchResults?.results?.length >= 10 && (
+                                        <button
+                                            onClick={() => {
+                                                setIsMobileSearchOpen(false);
+                                                setMobileInputValue('');
+                                                setMobileSearchQuery('');
+                                                navigate(`/buscar?q=${encodeURIComponent(mobileSearchQuery)}`);
+                                            }}
+                                            className="w-full flex items-center justify-center p-4 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-500/50 transition-all text-blue-400 hover:text-blue-300 text-sm font-medium mt-4"
+                                        >
+                                            Ver todos los resultados →
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                </div>
+            )}
+        </>
     );
 }
 
