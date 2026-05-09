@@ -56,8 +56,16 @@ function LoginPage() {
   };
 
   return (
+
     <div className="min-h-screen flex items-center justify-center bg-[#020617] px-3 sm:px-4 md:px-6 py-6 sm:py-8">
       <div className="w-full max-w-xs sm:max-w-sm">
+        {/* Credenciales de prueba */}
+        <div className="mb-8">
+          <div className="border border-white/10 rounded-sm px-4 py-2.5 text-center">
+            <p className="text-[9px] text-white/50 uppercase tracking-widest mb-1.5">Credenciales de prueba</p>
+            <p className="text-[12px] text-white/80 font-mono">demo@gmail.com · demo123</p>
+          </div>
+        </div>
         {/* Logo */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <img
@@ -65,7 +73,6 @@ function LoginPage() {
             alt="'Agon', del griego antiguo, significa lucha o competencia, evocando el desafío épico y la contienda en los videojuegos."
             className="h-10 sm:h-11 md:h-12 w-auto object-contain mx-auto mb-8 sm:mb-10 md:mb-12"
           />
-          {/* Divider minimalista */}
           <div className="border-t border-white/60"></div>
         </div>
 
